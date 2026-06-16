@@ -1,0 +1,52 @@
+{
+  "name": "p-queue-x",
+  "version": "1.0.0",
+  "description": "Zero-dependency promise-based concurrency-limited task queue with priority, timeout, pause/resume, and event hooks",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js"
+    }
+  },
+  "bin": {
+    "p-queue-x": "dist/cli.mjs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/test/*.test.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "queue",
+    "promise",
+    "concurrency",
+    "async",
+    "priority",
+    "task",
+    "p-queue",
+    "rate-limit",
+    "throttle",
+    "zero-dependency"
+  ],
+  "author": "sulthonzh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sulthonzh/p-queue-x"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}
