@@ -3,12 +3,15 @@
  * p-queue-x CLI — Demo and testing tool
  *
  * Usage:
+ *   p-queue-x [--version|-V]
  *   p-queue-x demo [--concurrency N] [--tasks N]
  *   p-queue-x bench [--concurrency N] [--tasks N] [--work MS]
  *   p-queue-x test-priority [--tasks N]
  */
 
-import { PQueue } from './index.js';
+import { PQueue, VERSION } from './index.js';
+
+const PACKAGE_VERSION = '1.0.0';
 
 function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -119,7 +122,14 @@ async function testPriority(args: Record<string, string | number | boolean>): Pr
 
 // ─── Main ─────────────────────────────────────────────────
 
-const command = process.argv[2];
+// Handle --version and -V flags before command parsing
+const firstArg = process.argv[2];
+if (firstArg === '--version' || firstArg === '-V') {
+  console.log(`p-queue-x v${PACKAGE_VERSION}`);
+  process.exit(0);
+}
+
+const command = firstArg;
 const args = parseArgs(process.argv.slice(3));
 
 switch (command) {

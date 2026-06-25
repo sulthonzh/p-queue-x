@@ -1,6 +1,7 @@
 {
   "name": "p-queue-x",
   "version": "1.0.0",
+  "type": "module",
   "description": "Zero-dependency promise-based concurrency-limited task queue with priority, timeout, pause/resume, and event hooks",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

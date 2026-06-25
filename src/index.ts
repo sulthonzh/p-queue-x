@@ -12,6 +12,9 @@
  * - Zero external dependencies
  */
 
+/** Version constant for API versioning. */
+export const VERSION = '1.0.0' as const;
+
 /** A queued task function. Must return a Promise. */
 export type TaskFunction<T = unknown> = () => Promise<T>;
 
