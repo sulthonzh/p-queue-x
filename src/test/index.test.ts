@@ -315,6 +315,99 @@ describe('createQueue', () => {
   });
 });
 
+// ─── onEmpty ───────────────────────────────────────────
+
+describe('PQueue — onEmpty', () => {
+  it('should resolve immediately when queue is already empty', async () => {
+    const q = new PQueue({ concurrency: 1 });
+    const start = Date.now();
+    await q.onEmpty();
+    assert.ok(Date.now() - start < 10);
+  });
+
+  it('should resolve when queue becomes empty (active tasks may remain)', async () => {
+    const q = new PQueue({ concurrency: 2 });
+
+    // Block with a long task
+    const blocker = q.add(() => sleep(60));
+
+    // Add shorter tasks that fill the queue
+    q.add(() => sleep(20));
+    q.add(() => sleep(20));
+
+    // Wait until queue drains but blocker still active
+    await q.onEmpty();
+    assert.equal(q.size, 0);
+    assert.ok(q.pending >= 1, 'blocker should still be running');
+
+    await blocker;
+    await q.onIdle();
+  });
+});
+
+// ─── Edge cases ─────────────────────────────────────────
+
+describe('PQueue — edge cases', () => {
+  it('start() should be a no-op when not paused', async () => {
+    const q = new PQueue({ concurrency: 1 });
+    const events: string[] = [];
+    q.on('resume', () => events.push('resume'));
+
+    q.start(); // not paused — should not emit resume
+    assert.deepEqual(events, []);
+
+    const result = await q.add(async () => 99);
+    assert.equal(result, 99);
+  });
+
+  it('pause() should be a no-op when already paused', async () => {
+    const q = new PQueue({ concurrency: 1 });
+    q.pause();
+    q.pause(); // second pause should not throw or double-emit
+
+    const events: string[] = [];
+    q.on('pause', () => events.push('pause'));
+    q.pause(); // third pause — listener added after first two, should not fire
+    assert.deepEqual(events, []);
+
+    q.start();
+    await q.onIdle();
+  });
+
+  it('should swallow listener errors without breaking the queue', async () => {
+    const q = new PQueue({ concurrency: 1 });
+
+    // Register a listener that throws
+    q.on('complete', () => {
+      throw new Error('listener boom');
+    });
+
+    // Queue should still work fine
+    const result = await q.add(async () => 42);
+    assert.equal(result, 42);
+  });
+
+  it('onEmpty should work with clear()', async () => {
+    const q = new PQueue({ concurrency: 1 });
+
+    // Block the queue
+    q.add(() => sleep(50));
+
+    // Fill queue
+    for (let i = 0; i < 3; i++) {
+      q.add(() => sleep(10)).catch(() => {});
+    }
+
+    assert.ok(q.size > 0);
+    q.clear();
+    assert.equal(q.size, 0);
+
+    // onEmpty should resolve since size is now 0
+    await q.onEmpty();
+    await q.onIdle();
+  });
+});
+
 // ─── Events ──────────────────────────────────────────────
 
 describe('PQueue — events', () => {

@@ -13,7 +13,7 @@
  */
 
 /** Version constant for API versioning. */
-export const VERSION = '1.0.0' as const;
+export const VERSION = '1.0.1' as const;
 
 /** A queued task function. Must return a Promise. */
 export type TaskFunction<T = unknown> = () => Promise<T>;

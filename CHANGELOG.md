@@ -5,6 +5,13 @@ All notable changes to p-queue-x will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-07-16
+
+### Changed
+- Added 12 tests covering `onEmpty()`, edge cases for `start()`/`pause()` no-ops, and emitter error swallowing
+- Test coverage: 100% lines (was 94.57%), 98.81% branches (was 95.16%)
+- Tests: 48 → 60, all GREEN
+
 ## [1.0.0] - 2026-06-16
 
 ### Added
@@ -27,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Performance**: O(1) operations for add/remove, O(log n) binary search for priority
 - **Type safety**: Full TypeScript support with exported types
 - **Flexible**: Supports both ESM and CommonJS modules
-- **Well-tested**: 48 test cases covering all functionality
+- **Well-tested**: 60 test cases covering all functionality
 
 ### Documentation
 - Comprehensive README with quick start guide
