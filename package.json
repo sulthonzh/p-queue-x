@@ -59,7 +59,7 @@
   "author": "sulthonzh",
   "devDependencies": {
     "@changesets/cli": "^3.0.1",
-    "@types/node": "^24.13.3",
+    "@types/node": "^26.0.0",
     "typescript": "^6.0.3"
   }
 }
